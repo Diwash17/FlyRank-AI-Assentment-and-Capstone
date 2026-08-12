@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Structured Content Archetype Clustering — FlyRank ML Internship Capstone</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#EDEFE9;
+    --paper-raised:#F5F6F1;
+    --ink:#161A17;
+    --ink-soft:#4B5249;
+    --rule:#D3D6C9;
+    --cobalt:#2E5EAA;
+    --cobalt-soft:#E7EDF6;
+    --amber:#E0A32E;
+    --amber-soft:#FBF1DE;
+    --green-good:#3E7A4E;
+    --max-w:760px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Source Serif 4', Georgia, serif;
+    font-size:18px;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:var(--max-w); margin:0 auto; padding:0 24px;}
+  .mono{font-family:'IBM Plex Mono', monospace;}
+
+  /* ---- nav ---- */
+  nav{
+    position:sticky; top:0; z-index:10;
+    background:rgba(237,239,233,0.92);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--rule);
+  }
+  nav .wrap{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:14px 24px; max-width:var(--max-w);
+  }
+  nav .brand{font-family:'IBM Plex Mono',monospace; font-size:13px; letter-spacing:0.04em; color:var(--ink-soft);}
+  nav a{color:var(--ink-soft); text-decoration:none; font-family:'IBM Plex Mono',monospace; font-size:12px;}
+  nav a:hover{color:var(--cobalt);}
+  nav .credit-link{color:var(--cobalt); font-weight:600;}
+
+  /* ---- hero ---- */
+  header.hero{padding:64px 0 40px; border-bottom:1px solid var(--rule);}
+  .eyebrow{
+    font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.08em;
+    text-transform:uppercase; color:var(--cobalt); margin:0 0 18px;
+  }
+  h1{
+    font-family:'Fraunces', serif; font-weight:600; font-optical-sizing:auto;
+    font-size:clamp(30px,5vw,44px); line-height:1.12; margin:0 0 20px; letter-spacing:-0.01em;
+  }
+  .abstract{
+    background:var(--paper-raised); border:1px solid var(--rule); border-radius:2px;
+    padding:22px 24px; font-size:16.5px; color:var(--ink-soft);
+  }
+  .abstract .label{
+    font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.08em;
+    text-transform:uppercase; color:var(--ink); display:block; margin-bottom:10px;
+  }
+  .byline{font-family:'IBM Plex Mono',monospace; font-size:13px; color:var(--ink-soft); margin-top:22px;}
+  .byline a{color:var(--cobalt);}
+
+  /* ---- position ladder (signature element) ---- */
+  .ladder{margin:36px 0 8px;}
+  .ladder-row{display:grid; grid-template-columns:64px 1fr 72px; align-items:center; gap:14px; margin-bottom:10px;}
+  .ladder-tier{font-family:'IBM Plex Mono',monospace; font-size:12.5px; color:var(--ink-soft); text-align:right;}
+  .ladder-bar-track{background:var(--paper-raised); border:1px solid var(--rule); height:22px; border-radius:2px; overflow:hidden;}
+  .ladder-bar{height:100%; background:var(--cobalt); border-radius:2px 0 0 2px;}
+  .ladder-val{font-family:'IBM Plex Mono',monospace; font-size:12.5px; color:var(--ink);}
+  .ladder-caption{font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--ink-soft); margin-top:10px;}
+
+  /* ---- sections ---- */
+  main{padding:8px 0 80px;}
+  section{padding:44px 0; border-bottom:1px solid var(--rule);}
+  section:last-of-type{border-bottom:none;}
+  .sec-num{font-family:'IBM Plex Mono',monospace; font-size:13px; color:var(--cobalt); letter-spacing:0.04em;}
+  h2{
+    font-family:'Fraunces', serif; font-weight:600; font-size:26px; margin:6px 0 20px; letter-spacing:-0.01em;
+  }
+  h3{font-family:'Fraunces', serif; font-weight:600; font-size:18px; margin:26px 0 10px;}
+  p{margin:0 0 16px;}
+  ul, ol{margin:0 0 16px; padding-left:22px;}
+  li{margin-bottom:8px;}
+  code{
+    font-family:'IBM Plex Mono',monospace; background:var(--paper-raised);
+    border:1px solid var(--rule); border-radius:3px; padding:1px 5px; font-size:0.86em;
+  }
+
+  /* ---- data table ---- */
+  table{width:100%; border-collapse:collapse; margin:20px 0; font-size:15.5px;}
+  th, td{text-align:left; padding:10px 12px; border-bottom:1px solid var(--rule);}
+  th{font-family:'IBM Plex Mono',monospace; font-size:11.5px; text-transform:uppercase; letter-spacing:0.04em; color:var(--ink-soft); font-weight:500;}
+  td.num, th.num{font-family:'IBM Plex Mono',monospace; text-align:right;}
+  tr.highlight td{background:var(--cobalt-soft);}
+
+  /* ---- callouts ---- */
+  .callout{
+    border-left:3px solid var(--amber); background:var(--amber-soft);
+    padding:14px 18px; margin:20px 0; font-size:16px; border-radius:0 2px 2px 0;
+  }
+  .callout .tag{
+    font-family:'IBM Plex Mono',monospace; font-size:11px; text-transform:uppercase;
+    letter-spacing:0.06em; color:#8A6314; display:block; margin-bottom:6px; font-weight:600;
+  }
+  .callout.good{border-left-color:var(--green-good); background:#EAF3EC;}
+  .callout.good .tag{color:var(--green-good);}
+
+  /* ---- recommendations list ---- */
+  .rec{
+    display:grid; grid-template-columns:34px 1fr; gap:14px;
+    padding:16px 0; border-bottom:1px solid var(--rule);
+  }
+  .rec:last-child{border-bottom:none;}
+  .rec-rank{font-family:'IBM Plex Mono',monospace; font-size:15px; color:var(--cobalt); font-weight:600;}
+  .rec-action{font-family:'IBM Plex Mono',monospace; font-size:12.5px; background:var(--paper-raised); border:1px solid var(--rule); padding:2px 8px; border-radius:3px; display:inline-block; margin-bottom:6px;}
+
+  /* ---- repro block ---- */
+  .repro-list{list-style:none; padding:0; margin:20px 0;}
+  .repro-list li{
+    font-family:'IBM Plex Mono',monospace; font-size:14px; padding:10px 0;
+    border-bottom:1px solid var(--rule); display:flex; justify-content:space-between; gap:12px;
+  }
+  .repro-list a{color:var(--cobalt); text-decoration:none;}
+  .repro-list a:hover{text-decoration:underline;}
+
+  footer{
+    padding:40px 0 60px; text-align:center;
+    font-family:'IBM Plex Mono',monospace; font-size:13.5px; color:var(--ink-soft);
+  }
+  footer a{color:var(--cobalt); font-weight:600; text-decoration:none;}
+  footer a:hover{text-decoration:underline;}
+
+  @media (max-width:600px){
+    body{font-size:16.5px;}
+    .ladder-row{grid-template-columns:52px 1fr 60px; gap:8px;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <span class="brand">LANE 3 · ARCHETYPE CLUSTERING</span>
+    <a href="#acknowledgments" class="credit-link">flyrank.ai data ↗</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="eyebrow">FlyRank ML Internship Capstone</p>
+    <h1>Does Knowing a Content Item's Archetype Help Predict Whether It's Underperforming?</h1>
+
+    <div class="abstract">
+      <span class="label">Abstract</span>
+      <p style="margin:0;">
+        This study asks whether an unsupervised content archetype — a behavioral cluster learned
+        from position, engagement, and content signals — improves prediction of click-through
+        performance beyond raw metrics alone. Using one mid-panel month of pseudonymized
+        FlyRank warehouse data (content-month grain, <span class="mono">gsc_and_ga4</span>-access
+        clients), a Random Forest classifier was compared against a transparent position-benchmark
+        baseline on an identical client-grouped split. The model reached an honest 0.927 AUC, while
+        the baseline's higher 0.963 AUC was found to be near-circular with its own target — and the
+        archetype cluster itself contributed almost no predictive value (0.0013 combined importance).
+        The output is a ranked, human-reviewed content action queue, not an autonomous system.
+      </p>
+    </div>
+
+    <div class="byline">
+      Diwash Adhikari · <a href="https://github.com/Diwash17/FlyRank-AI-Assentment-and-Capstone" target="_blank" rel="noopener">Repo ↗</a> · Lane 3
+    </div>
+
+    <div class="ladder">
+      <div class="ladder-row">
+        <span class="ladder-tier">1–3</span>
+        <div class="ladder-bar-track"><div class="ladder-bar" style="width:92%"></div></div>
+        <span class="ladder-val">highest</span>
+      </div>
+      <div class="ladder-row">
+        <span class="ladder-tier">4–10</span>
+        <div class="ladder-bar-track"><div class="ladder-bar" style="width:70%"></div></div>
+        <span class="ladder-val mono">↓</span>
+      </div>
+      <div class="ladder-row">
+        <span class="ladder-tier">11–20</span>
+        <div class="ladder-bar-track"><div class="ladder-bar" style="width:48%"></div></div>
+        <span class="ladder-val mono">↓</span>
+      </div>
+      <div class="ladder-row">
+        <span class="ladder-tier">21–50</span>
+        <div class="ladder-bar-track"><div class="ladder-bar" style="width:24%"></div></div>
+        <span class="ladder-val mono">↓</span>
+      </div>
+      <div class="ladder-row">
+        <span class="ladder-tier">51+</span>
+        <div class="ladder-bar-track"><div class="ladder-bar" style="width:10%"></div></div>
+        <span class="ladder-val">lowest</span>
+      </div>
+      <p class="ladder-caption">CTR by search-position tier, this lane's slice — shape only; ⚠️ swap in exact bar widths from <code>work/outputs/w07_metrics.json</code> → <code>benchmark_by_position_bucket</code> before publishing.</p>
+    </div>
+  </div>
+</header>
+
+<main>
+<div class="wrap">
+
+  <section id="intro">
+    <span class="sec-num">01</span>
+    <h2>Introduction</h2>
+    <p>
+      Content teams generate more pages than any editor can manually triage. FlyRank's internal
+      workflow uses hand-written flags (staleness, CTR-fix, quick-win) to prioritize review — this
+      study checks whether those flags' underlying assumptions hold on a real warehouse slice, then
+      asks a harder question: does the internship's own capstone lane, unsupervised archetype
+      clustering, actually add predictive value on top of what's already measurable?
+    </p>
+    <p>
+      The decision this supports: which content items a human editor reviews first, and for what
+      kind of fix. The cost of a wrong call is a wasted review cycle, not a irreversible action — every
+      recommendation below is explicitly reviewed by a person before anything changes.
+    </p>
+  </section>
+
+  <section id="data">
+    <span class="sec-num">02</span>
+    <h2>Data</h2>
+    <p>
+      <strong>Release:</strong> FlyRank internship-warehouse (Hugging Face, gated, ~79M rows across
+      tables). <strong>Tables:</strong> <code>dim_content</code>, <code>dim_clients</code>,
+      <code>fact_content_daily_performance</code> (partitioned by <code>month=YYYY-MM</code>).
+      <strong>Window:</strong> one mid-panel month (<code>2026-03</code>), filtered to
+      <code>gsc_and_ga4</code>-access clients, published and non-deleted content only.
+    </p>
+    <h3>Deliberately excluded</h3>
+    <ul>
+      <li><code>fact_content_query_90d</code> — different grain and fixed window, not used this lane</li>
+      <li><code>provider_used</code>, <code>model_used</code> — operational metadata, not a behavior signal</li>
+      <li><code>content_updated_date</code>, <code>last_optimized_date</code>, <code>optimization_eligible_date</code> — can be set after the decision month; unverifiable point-in-time risk</li>
+      <li>All hash-ID columns — used for joins/grouping only, never as model features</li>
+      <li>The sealed final month (<code>2026-06</code>) — referenced only to demonstrate leakage, never to build features or labels</li>
+    </ul>
+    <div class="callout good">
+      <span class="tag">Public-safety pass</span>
+      No client names, raw URLs, or query text appear anywhere in this pipeline — every identifier is a pseudonymous hash from the warehouse itself.
+    </div>
+  </section>
+
+  <section id="methodology">
+    <span class="sec-num">03</span>
+    <h2>Methodology</h2>
+    <p><strong>Target (proxy):</strong> <code>high_performer = avg_ctr &gt; median(avg_ctr)</code>, thresholded within the month — unsupervised-adjacent, since no ground-truth performance label exists in the warehouse.</p>
+    <p><strong>Features (12):</strong> position, impressions, on-site engagement ratios, AI-referral share, content age, word count, search volume, competition, one-hot content type / intent, and a KMeans (k=6) archetype cluster label. <code>avg_ctr</code> itself is excluded — it defines the target, so including it would be circular.</p>
+    <p><strong>Baseline:</strong> <code>score = expected_ctr_for_position_bucket − actual_ctr</code>, a transparent single-signal rule, matching FlyRank's own CTR-fix flag logic.</p>
+    <p><strong>Validation:</strong> client-grouped split (<code>GroupShuffleSplit</code> on client ID, confirmed zero overlap) — avoids the model memorizing client-specific editorial style instead of a generalizable pattern.</p>
+    <p><strong>Leakage checks:</strong> a deliberate sealed-month leak trap, a naive-random-split vs. grouped-split comparison, and a scan confirming no excluded/operational field reached the final feature set.</p>
+  </section>
+
+  <section id="results">
+    <span class="sec-num">04</span>
+    <h2>Results</h2>
+    <table>
+      <thead>
+        <tr><th>Method</th><th class="num">AUC</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Baseline rule (single signal)</td>
+          <td class="num">0.963</td>
+        </tr>
+        <tr class="highlight">
+          <td>Random Forest (full features + archetype cluster)</td>
+          <td class="num">0.927</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="callout">
+      <span class="tag">Read carefully</span>
+      The baseline's higher AUC is <strong>not</strong> a stronger result. <code>corr(baseline_score, avg_ctr) = -1.000</code> on the held-out split — the baseline score is a near-exact linear rescaling of the target itself. The model's 0.927, built entirely from features independent of the target, is the trustworthy number here.
+    </div>
+    <h3>What the model actually leans on</h3>
+    <p>Permutation importance is dominated by <code>total_impressions</code> (0.153) and <code>sessions_per_impression</code> (0.074). The archetype cluster's combined importance was <strong>0.0013</strong> — effectively zero. Clustering content into behavioral archetypes did not meaningfully help predict CTR performance in this test.</p>
+    <h3>Error profile</h3>
+    <p>13.8% misclassified on a 32,446-row held-out test set. A deliberate leak trap (injecting a sealed future month's click count) did <em>not</em> inflate this model's score (0.925 with the leak vs. 0.927 honest) — unlike a simpler logistic-regression version of the same test, where the leak did jump the score, this ensemble's existing features already captured most of the available signal.</p>
+  </section>
+
+  <section id="limitations">
+    <span class="sec-num">05</span>
+    <h2>Limitations &amp; Honest Framing</h2>
+    <ol>
+      <li>Baseline AUC is inflated by near-circularity, not genuine predictive skill.</li>
+      <li>Archetype clustering did not earn a predictive role — a genuine negative result, reported as one.</li>
+      <li>Single cross-sectional month; nothing here distinguishes a consistently weak page from one having a quiet month.</li>
+      <li>No true sealed holdout evaluation was run — the final month is referenced only to demonstrate leakage, not to produce a blind evaluation.</li>
+      <li>Every relationship reported is observational/correlational — no causal design, no claim of "why," only "what was observed."</li>
+      <li>Scoped to <code>gsc_and_ga4</code>-access clients, one month, one client mix — not a guarantee for a different month or client base.</li>
+    </ol>
+  </section>
+
+  <section id="recommendations">
+    <span class="sec-num">06</span>
+    <h2>Ranked Recommendations</h2>
+    <p>Two layers, from the action playbook: item-level review candidates (position-benchmark rule) and archetype-level action mapping (read off each cluster's own profile, not hand-picked).</p>
+
+    <div class="rec">
+      <span class="rec-rank">01</span>
+      <div>
+        <span class="rec-action">REVIEW_TITLE_META</span>
+        <p style="margin:6px 0 0;">Items whose CTR falls meaningfully below their own position tier's benchmark — highest-confidence, most reproducible signal in this study.</p>
+      </div>
+    </div>
+    <div class="rec">
+      <span class="rec-rank">02</span>
+      <div>
+        <span class="rec-action">REFRESH_CANDIDATE</span>
+        <p style="margin:6px 0 0;">Archetype clusters skewing older and below-median CTR — directionally consistent with FlyRank's own portfolio-level refresh findings.</p>
+      </div>
+    </div>
+    <div class="rec">
+      <span class="rec-rank">03</span>
+      <div>
+        <span class="rec-action">DISTRIBUTE_SUPPORT</span>
+        <p style="margin:6px 0 0;">Clusters already ranking well with strong CTR — protect and amplify rather than rebuild.</p>
+      </div>
+    </div>
+    <div class="rec">
+      <span class="rec-rank">—</span>
+      <div>
+        <span class="rec-action" style="background:var(--amber-soft); border-color:var(--amber);">NEVER AUTOMATE</span>
+        <p style="margin:6px 0 0;">No queue item auto-publishes. Every recommendation requires human review against the no-go list (brand voice, compliance, editorial roadmap) before any change ships.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="reproducibility">
+    <span class="sec-num">07</span>
+    <h2>Reproducibility</h2>
+    <p>Every number above traces back to a specific, re-runnable notebook in the repo:</p>
+    <ul class="repro-list">
+      <li><span>Data contract &amp; grain verification</span><a href="https://github.com/Diwash17/FlyRank-AI-Assentment-and-Capstone/blob/main/work/notebooks/w03_data_contract.ipynb" target="_blank" rel="noopener">w03_data_contract.ipynb ↗</a></li>
+      <li><span>Baseline rule + ranked queue</span><a href="https://github.com/Diwash17/FlyRank-AI-Assentment-and-Capstone/blob/main/work/notebooks/w04_baseline_score.ipynb" target="_blank" rel="noopener">w04_baseline_score.ipynb ↗</a></li>
+      <li><span>Model, archetype cluster, baseline comparison</span><a href="https://github.com/Diwash17/FlyRank-AI-Assentment-and-Capstone/blob/main/work/notebooks/w05_model.ipynb" target="_blank" rel="noopener">w05_model.ipynb ↗</a></li>
+      <li><span>Validation audit, paper critique, leakage re-check</span><a href="https://github.com/Diwash17/FlyRank-AI-Assentment-and-Capstone/blob/main/work/notebooks/w06_validation_audit.ipynb" target="_blank" rel="noopener">w06_validation_audit.ipynb ↗</a></li>
+      <li><span>Action playbook, exports, figures</span><a href="https://github.com/Diwash17/FlyRank-AI-Assentment-and-Capstone/blob/main/work/notebooks/w07_action_playbook.ipynb" target="_blank" rel="noopener">w07_action_playbook.ipynb ↗</a></li>
+      <li><span>This paper's own notebook</span><a href="https://github.com/Diwash17/FlyRank-AI-Assentment-and-Capstone/blob/main/work/notebooks/capstone.ipynb" target="_blank" rel="noopener">capstone.ipynb ↗</a></li>
+    </ul>
+    <p style="font-size:15px; color:var(--ink-soft);">Random seeds fixed at <code>random_state=0</code> throughout. Re-run any notebook top-to-bottom from a fresh clone with an HF_TOKEN Colab secret set — see each notebook's setup cell.</p>
+  </section>
+
+</div>
+</main>
+
+<footer id="acknowledgments">
+  <div class="wrap">
+    Built on the FlyRank ML Internship dataset — <a href="https://flyrank.ai" target="_blank" rel="noopener">flyrank.ai ↗</a>
+  </div>
+</footer>
+
+</body>
+</html>
